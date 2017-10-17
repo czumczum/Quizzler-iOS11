@@ -49,8 +49,11 @@ class ViewController: UIViewController {
     }
 
     func nextQuestion() {
-        if !isThatLastQuestion() {
+        if currentQuestion == allQuestions.list.count - 1 {
             currentQuestion += 1
+        }
+        else {
+            endQuizzler()
         }
     }
     
@@ -68,47 +71,16 @@ class ViewController: UIViewController {
     func checkAnswer() {
         if pickedAnswer == allQuestions.list[currentQuestion].answer {
             userScore += 10
-            feedbackAlert(correct: true)
+            ProgressHUD.showSuccess("Correct!")
     }
         else {
             userScore -= 1
-            feedbackAlert(correct: false)
+            ProgressHUD.showError("Wrong!")
         }
-    }
-    
-    func feedbackAlert(correct : Bool) {
-        var alertMessage : String
-        if correct {
-            alertMessage = "Good answer! You've got 10 points! 😎"
-        }
-        else {
-            alertMessage = "Wrong! You've got minus 1 point! 😢"
-        }
-        
-        let alert = UIAlertController(title: "Feedback", message: alertMessage, preferredStyle: .alert)
-        
-        if !isThatLastQuestion() {
-            let hideAlert = UIAlertAction(title: "OK", style: .default)
-            alert.addAction(hideAlert)
-        }
-        else {
-            let hideAlert = UIAlertAction(title: "OK", style: .default, handler: { (UIAlertAction) in self.endQuizzler()
-            })
-            alert.addAction(hideAlert)
-        }
-        
-        present(alert, animated: true, completion: nil)
-    }
-    
-    func isThatLastQuestion() -> Bool {
-        if currentQuestion == allQuestions.list.count - 1 {
-            return true
-        }
-            return false
     }
     
     func startOver() {
-       userScore = 0
+        userScore = 0
         currentQuestion = 0
         updateUI()
     }
